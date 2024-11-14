@@ -6,8 +6,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalLoginComponent } from '../component/modal-login/modal-login.component';
-import { ModalRegisterComponent } from '../component/modal-register/modal-register.component';
+import { ModalLoginComponent } from '../component/model/modal-login/modal-login.component';
+import { ModalRegisterComponent } from '../component/model/modal-register/modal-register.component';
 import { CommonModule } from '@angular/common';
 
 @Component({

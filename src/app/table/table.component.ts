@@ -7,8 +7,8 @@ import {
   Product,
 } from '../interface/table.interface';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalEditAddComponent } from '../component/modal-edit-add/modal-edit-add.component';
-import { ModalEditComponent } from '../component/modal-edit/modal-edit.component';
+import { ModalEditAddComponent } from '../component/model/modal-edit-add/modal-edit-add.component';
+import { ModalEditComponent } from '../component/model/modal-edit/modal-edit.component';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';

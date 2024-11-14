@@ -1,0 +1,22 @@
+<h3 mat-dialog-title>Створити продукт</h3>
+<div mat-dialog-content class="containerModel">
+ <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Назва</mat-label>
+    <input matInput placeholder="Назва" [(ngModel)]="data.name">
+  </mat-form-field>
+  <mat-form-field class="example-full-width" appearance="fill"> 
+    <mat-label>Ціна</mat-label>
+    <input matInput placeholder="Ціна" [(ngModel)]="data.price">
+  </mat-form-field>
+  <mat-form-field class="example-full-width" appearance="fill"> 
+    <mat-label>Знижка</mat-label>
+    <input matInput placeholder="Знижка"  [(ngModel)]="data.discount">
+  </mat-form-field>
+  <mat-form-field class="example-full-width" appearance="fill"> 
+    <mat-label>SKU</mat-label>
+    <input matInput placeholder="SKU " [(ngModel)]="data.sku">
+  </mat-form-field>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Скасувати</button>
+  <button mat-button (click)="onSave()" cdkFocusInitial>Зберегти</button>
+</div>

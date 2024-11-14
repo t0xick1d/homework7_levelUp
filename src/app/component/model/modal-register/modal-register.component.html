@@ -1,0 +1,31 @@
+<div class="container">
+ <div class="titleContainer">
+  <h2>Вход</h2>
+  <h2>Регистрация</h2>
+</div>
+<form [formGroup]="formRegister"  class="container" >
+ <mat-form-field appearance="fill">
+  <mat-label>Name</mat-label>
+  <input formControlName="name" matInput>
+</mat-form-field>
+<mat-form-field appearance="fill">
+  <mat-label>Email</mat-label>
+  <input formControlName="email" matInput>
+</mat-form-field>
+<mat-form-field appearance="fill">
+  <mat-label>Password</mat-label>
+  <input formControlName="password" matInput [type]="hide ? 'password' : 'text'">
+ <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+   <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+ </button>
+</mat-form-field>
+<mat-form-field appearance="fill">
+  <mat-label>Password</mat-label>
+  <input formControlName="confirmPassword" matInput [type]="hide ? 'password' : 'text'">
+ <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+   <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+ </button>
+</mat-form-field>
+<button  mat-raised-button color="primary" class="submitButton">Вход</button>
+</form>
+</div>
