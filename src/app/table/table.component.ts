@@ -16,48 +16,59 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
+import { NameComponent } from '../component/tableComponents/name/name.component';
+import { CommonModule } from '@angular/common';
+import { TableModule } from './table.module';
+import { SkuComponent } from '../component/tableComponents/sku/sku.component';
+import { PriceComponent } from '../component/tableComponents/price/price.component';
+import { CountryComponent } from '../component/tableComponents/country/country.component';
+import { TagsComponent } from '../component/tableComponents/tags/tags.component';
+import { ActionComponent } from '../component/tableComponents/action/action.component';
 
 @Component({
   selector: 'app-table',
   standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     MatIconModule,
     MatFormFieldModule,
     MatSelectModule,
     MatTableModule,
     MatButtonModule,
+    TableModule,
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
 })
 export class TableComponent implements OnInit {
-  // public configure: ConfigTable[] = [
-  //   {
-  //     titleColums: 'name',
-  //     component: NameComponent,
-  //   },
-  //   {
-  //     titleColums: 'price',
-  //     component: PriceComponent,
-  //   },
-  //   {
-  //     titleColums: 'sku',
-  //     component: SkuComponent,
-  //   },
-  //   {
-  //     titleColums: 'country',
-  //     component: CountryComponent,
-  //   },
-  //   {
-  //     titleColums: 'tags',
-  //     component: TagsComponent,
-  //   },
-  //   {
-  //     titleColums: 'actions',
-  //     component: ActionComponent,
-  //   },
-  // ];
+  public configure: ConfigTable[] = [
+    {
+      titleColums: 'name',
+      component: NameComponent,
+    },
+    {
+      titleColums: 'sku',
+      component: SkuComponent,
+    },
+    {
+      titleColums: 'price',
+      component: PriceComponent,
+    },
+
+    {
+      titleColums: 'country',
+      component: CountryComponent,
+    },
+    {
+      titleColums: 'tags',
+      component: TagsComponent,
+    },
+    {
+      titleColums: 'actions',
+      component: ActionComponent,
+    },
+  ];
   public dataSource: Product[] = [];
   public filterDataSource: Product[] | undefined = undefined;
   public dataFilter: FilterConfig[] = [];
@@ -70,7 +81,7 @@ export class TableComponent implements OnInit {
     this.dataFilter = this.dataFilter;
   }
   ngOnInit(): void {
-    // this.displayedColumns = this.configure.map((e) => e.titleColums);
+    this.displayedColumns = this.configure.map((e) => e.titleColums);
     this.tableService.nGetData();
     this.tableService.productSubject.subscribe((data) => {
       this.dataSource = data;

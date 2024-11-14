@@ -29,31 +29,31 @@
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
     <mat-cell *matCellDef="let element"> 
-     <!-- <app-name [name]="element.name"></app-name>  -->
+     <app-name [name]="element.name"></app-name> 
     </mat-cell>
   </ng-container> 
   <ng-container matColumnDef="sku">
     <mat-header-cell *matHeaderCellDef> SKU </mat-header-cell>
     <mat-cell *matCellDef="let element">
-     <!-- <app-sku [id]="element.id" ></app-sku> -->
+     <app-sku [id]="element.id" ></app-sku>
     </mat-cell>
   </ng-container>
   <ng-container matColumnDef="price">
     <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
     <mat-cell *matCellDef="let element">
-     <!-- <app-price [price]="element.price" [discount]="element.discount"></app-price>  -->
+     <app-price [price]="element.price" [discount]="element.discount"></app-price> 
     </mat-cell>
   </ng-container>
    <ng-container matColumnDef="country">
     <mat-header-cell *matHeaderCellDef> inStock </mat-header-cell>
     <mat-cell *matCellDef="let element"> 
-     <!-- <app-country [inStock]="element.inStock"></app-country>  -->
+     <app-country [inStock]="element.inStock"></app-country> 
     </mat-cell>
   </ng-container>
   <ng-container matColumnDef="tags" >
     <mat-header-cell *matHeaderCellDef> Category </mat-header-cell>
     <mat-cell *matCellDef="let element" (click)="openEditCtegories(element)" >
-     <!-- <app-tags [category]="element.category"></app-tags> -->
+     <app-tags [category]="element.category"></app-tags>
     </mat-cell>
   </ng-container>
   <ng-container matColumnDef="actions">
