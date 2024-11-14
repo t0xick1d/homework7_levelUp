@@ -1,0 +1,24 @@
+<mat-drawer-container  autosize>
+  <mat-drawer #drawer class="example-sidenav" mode="side">
+    <h2>Головна</h2>
+    <h2>Продукти</h2>
+    <h2>Замовлення</h2>
+    <h2>Клієнти</h2>
+    <h2>Налаштування</h2>
+  </mat-drawer>
+  <mat-toolbar >
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="drawer.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>My App</span> 
+  <span class="example-spacer"></span>
+   <button mat-flat-button color="primary"  class="buttonMenu" type="button" (click)="openLoginModal()">Log In</button>
+  <button mat-stroked-button color="primary" (click)="openRegisterModal()">Register</button> 
+</mat-toolbar>
+    <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+      <mat-button-toggle value="storeA"  routerLink="/storeA">storeA</mat-button-toggle>
+      <mat-button-toggle value="storeB" routerLink="/storeB">storeB</mat-button-toggle>
+      <mat-button-toggle value="storeC" routerLink="/storeC">storeC</mat-button-toggle>
+    </mat-button-toggle-group> 
+    <router-outlet class="table"></router-outlet>
+</mat-drawer-container>

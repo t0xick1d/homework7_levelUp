@@ -1,0 +1,67 @@
+<button  class="buttonMenu" type="button" mat-button (click)="openDialog()">
+<mat-icon>add</mat-icon>
+</button>
+<mat-form-field appearance="fill">
+  <mat-label>Filter</mat-label>
+  <mat-select [(ngModel)]="selectedValue" (ngModelChange)="changeSelect($event)">
+  @for (option of dataFilter; track option.name) {
+    <mat-option [value]="option.name">
+      {{option.label}}
+    </mat-option>
+}
+  </mat-select>
+</mat-form-field>
+@if (activeSelectedCategori) {
+  <mat-form-field appearance="fill">
+  <mat-label>Filter</mat-label>
+  <mat-select [(ngModel)]="selectedFilter">
+    @for (option of activeSelectedCategori; track option.name) {
+     <mat-option  [value]="option.name">
+       {{option.name}}
+     </mat-option>
+   }
+  </mat-select>
+</mat-form-field>
+}
+<button mat-raised-button color="primary" (click)="addFilter()">Apply</button>
+<button mat-raised-button color="warn" (click)="resetFilter()">Reset</button>
+<mat-table [dataSource]='filterDataSource? filterDataSource: dataSource' class="mat-elevation-z8 table">
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let element"> 
+     <!-- <app-name [name]="element.name"></app-name>  -->
+    </mat-cell>
+  </ng-container> 
+  <ng-container matColumnDef="sku">
+    <mat-header-cell *matHeaderCellDef> SKU </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+     <!-- <app-sku [id]="element.id" ></app-sku> -->
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="price">
+    <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+     <!-- <app-price [price]="element.price" [discount]="element.discount"></app-price>  -->
+    </mat-cell>
+  </ng-container>
+   <ng-container matColumnDef="country">
+    <mat-header-cell *matHeaderCellDef> inStock </mat-header-cell>
+    <mat-cell *matCellDef="let element"> 
+     <!-- <app-country [inStock]="element.inStock"></app-country>  -->
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="tags" >
+    <mat-header-cell *matHeaderCellDef> Category </mat-header-cell>
+    <mat-cell *matCellDef="let element" (click)="openEditCtegories(element)" >
+     <!-- <app-tags [category]="element.category"></app-tags> -->
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+    <mat-cell *matCellDef="let element"> 
+     <!-- <app-action [item]="element"></app-action>  -->
+    </mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
