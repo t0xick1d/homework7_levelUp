@@ -7,4 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class CountryComponent {
   @Input() inStock!: boolean;
+  constructor() {}
 }

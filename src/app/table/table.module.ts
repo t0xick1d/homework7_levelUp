@@ -28,7 +28,8 @@ import { ActionComponent } from '../component/tableComponents/action/action.comp
     MatIconModule,
     MatChipsModule,
     MatMenuModule,
-    MatButtonModule,
+   MatButtonModule,
+    
   ],
   exports: [
     NameComponent,

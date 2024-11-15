@@ -1,10 +1,8 @@
- <mat-form-field>
-  <mat-chip-grid #chipList>
-     <mat-chip mat-chip-row>
-       {{category}}
-      <button matChipRemove>
-        <mat-icon>cancel</mat-icon>
-      </button>
-     </mat-chip>
-  </mat-chip-grid>
-</mat-form-field>
+  <mat-chip-set>
+   <mat-chip>    
+    {{category}}   
+    <button matChipRemove>
+     <mat-icon>cancel</mat-icon>
+    </button>
+   </mat-chip>
+</mat-chip-set>

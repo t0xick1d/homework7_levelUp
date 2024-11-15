@@ -1,1 +1,27 @@
-<p>modal-edit works!</p>
+<div class="container">
+<h3 mat-dialog-title>Редагувати продукт </h3>
+<mat-tab-group dynamicHeight [(selectedIndex)]="selectedTabIndex">
+  <mat-tab label="Product"> 
+   <div mat-dialog-content >
+    <form [formGroup]="formEdit"  class="containerModel"  >
+   <mat-form-field appearance="fill">
+      <mat-label>Назва</mat-label>
+      <input matInput placeholder="Назва" formControlName="name">
+    </mat-form-field>
+    <mat-form-field appearance="fill"> 
+      <mat-label>Ціна</mat-label>
+      <input matInput placeholder="Ціна" formControlName="price" >
+    </mat-form-field>
+    <div mat-dialog-actions>
+     <button mat-button (click)="onNoClick()">Скасувати</button>
+     <button mat-button (click)="onSave()" cdkFocusInitial>Зберегти</button>
+    </div>
+    </form>
+  <mat-tab label="Category"> 
+    {{dataCategories}}
+<div mat-dialog-actions>
+     <button mat-flat-button (click)="onNoClick()">Скасувати</button>
+     <button mat-button (click)="onSave()" cdkFocusInitial>Зберегти</button>
+    </div>
+</mat-tab>
+</div>
