@@ -77,7 +77,7 @@ export class TableComponent implements OnInit {
   filters$: Observable<FilterConfig[]>;
   public dataSource: Product[] = [];
   public filterDataSource: Product[] | undefined = undefined;
-  public dataFilter: FilterConfig[] = [];
+  // public dataFilter: FilterConfig[] = [];
   public displayedColumns: string[] = [];
   public selectedValue: string | undefined = '';
   public selectedFilter: string | undefined = undefined;
@@ -88,7 +88,6 @@ export class TableComponent implements OnInit {
     private tableService: TableService,
     private store: Store
   ) {
-    this.dataFilter = this.dataFilter;
     this.filters$ = this.store.select(selectAllFilter);
   }
   ngOnInit(): void {
@@ -98,14 +97,6 @@ export class TableComponent implements OnInit {
       this.dataSource = data;
     });
     this.store.dispatch(loadFilters());
-    // console.log(this.filters$);
-    // this.filters$.subscribe((v) => {
-    //   console.log(v);
-    // });
-    this.tableService.nGetDataFilter();
-    this.tableService.filterSubject.subscribe((data) => {
-      this.dataFilter = data;
-    });
   }
   openEditCtegories(element: Product): void {
     const dialogRef = this.dialog.open(ModalEditComponent, {
@@ -123,9 +114,11 @@ export class TableComponent implements OnInit {
     this.tableService.productSubject.next([]);
   }
   changeSelect(newValue: any) {
-    this.activeSelectedCategori = this.dataFilter.filter(
-      (e) => e.name === this.selectedValue
-    )[0].options;
+    this.filters$.subscribe((v) => {
+      this.activeSelectedCategori = v.filter(
+        (e) => e.name === this.selectedValue
+      )[0].options;
+    });
   }
   addFilter() {
     if (this.selectedValue === 'category') {

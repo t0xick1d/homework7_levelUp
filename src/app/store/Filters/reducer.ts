@@ -12,11 +12,10 @@ export const initialState: IFilters = {
 
 export const filterReducer = createReducer(
   initialState,
-  on(loadFilterSuccess, (state, action) => {
-    console.log(state, action);
+  on(loadFilterSuccess, (state, { filters }) => {
     return {
       ...state,
-      filter: action.filters,
+      filters,
     };
   })
 );

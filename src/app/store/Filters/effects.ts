@@ -13,9 +13,11 @@ export class FilterEffects {
     this.action$.pipe(
       ofType(loadFilters),
       mergeMap(() =>
-        this.tableService
-          .nGetDataFilter()
-          .pipe(map((filters) => loadFilterSuccess({ filters })))
+        this.tableService.nGetDataFilter().pipe(
+          map((filters) => {
+            return loadFilterSuccess({ filters: filters.body });
+          })
+        )
       )
     )
   );

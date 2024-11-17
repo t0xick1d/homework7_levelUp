@@ -54,8 +54,7 @@ export class TableService extends AbstractService {
       this.filterSubject.next(data.body);
       return data.body;
     });
-    this.getDataFilter().subscribe((data) => data.body);
-    console.log(this.getDataFilter());
+    // this.getDataFilter().subscribe((data) => data.body);
     return this.getDataFilter();
   }
   public postData(body: newProduct): Observable<any> {

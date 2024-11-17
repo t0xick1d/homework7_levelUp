@@ -4,7 +4,7 @@
 <mat-form-field appearance="fill">
   <mat-label>Filter</mat-label>
   <mat-select [(ngModel)]="selectedValue" (ngModelChange)="changeSelect($event)">
-  @for (option of dataFilter; track option.name) {
+  @for (option of filters$| async; track option.name) {
     <mat-option [value]="option.name">
       {{option.label}}
     </mat-option>
