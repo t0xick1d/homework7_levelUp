@@ -24,6 +24,11 @@ import { PriceComponent } from '../component/tableComponents/price/price.compone
 import { CountryComponent } from '../component/tableComponents/country/country.component';
 import { TagsComponent } from '../component/tableComponents/tags/tags.component';
 import { ActionComponent } from '../component/tableComponents/action/action.component';
+import { Store } from '@ngrx/store';
+import { selectAllFilter } from '../store/Filters/select';
+import { Observable } from 'rxjs';
+import { IFilters } from '../store/Filters/reducer';
+import { loadFilters, loadFilterSuccess } from '../store/Filters/action';
 
 @Component({
   selector: 'app-table',
@@ -69,6 +74,7 @@ export class TableComponent implements OnInit {
       component: ActionComponent,
     },
   ];
+  filters$: Observable<FilterConfig[]>;
   public dataSource: Product[] = [];
   public filterDataSource: Product[] | undefined = undefined;
   public dataFilter: FilterConfig[] = [];
@@ -77,8 +83,13 @@ export class TableComponent implements OnInit {
   public selectedFilter: string | undefined = undefined;
   public activeSelectedCategori: FilterOption[] | undefined = undefined;
 
-  constructor(public dialog: MatDialog, private tableService: TableService) {
+  constructor(
+    public dialog: MatDialog,
+    private tableService: TableService,
+    private store: Store
+  ) {
     this.dataFilter = this.dataFilter;
+    this.filters$ = this.store.select(selectAllFilter);
   }
   ngOnInit(): void {
     this.displayedColumns = this.configure.map((e) => e.titleColums);
@@ -86,6 +97,11 @@ export class TableComponent implements OnInit {
     this.tableService.productSubject.subscribe((data) => {
       this.dataSource = data;
     });
+    this.store.dispatch(loadFilters());
+    // console.log(this.filters$);
+    // this.filters$.subscribe((v) => {
+    //   console.log(v);
+    // });
     this.tableService.nGetDataFilter();
     this.tableService.filterSubject.subscribe((data) => {
       this.dataFilter = data;

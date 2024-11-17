@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 
 import { Product, newProduct } from '../interface/table.interface';
 import { FilterConfig } from '../interface/table.interface';
+import { Filter } from '../store/shared/filter.inerface';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,7 @@ export class TableService extends AbstractService {
   }
 
   public getData(): Observable<any> {
+    this.router;
     return this.http
       .request({
         method: 'GET',
@@ -47,10 +49,14 @@ export class TableService extends AbstractService {
       this.productSubject.next(data.body);
     });
   }
-  public nGetDataFilter(): void {
+  public nGetDataFilter() {
     this.getDataFilter().subscribe((data) => {
       this.filterSubject.next(data.body);
+      return data.body;
     });
+    this.getDataFilter().subscribe((data) => data.body);
+    console.log(this.getDataFilter());
+    return this.getDataFilter();
   }
   public postData(body: newProduct): Observable<any> {
     return this.http
