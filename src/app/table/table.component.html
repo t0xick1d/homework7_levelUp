@@ -3,7 +3,7 @@
 </button>
 <mat-form-field appearance="fill">
   <mat-label>Filter</mat-label>
-  <mat-select [(ngModel)]="selectedValue" (ngModelChange)="changeSelect($event)">
+  <mat-select [(ngModel)]="selectedValue" (ngModelChange)="changeSelect()">
   @for (option of filters$| async; track option.name) {
     <mat-option [value]="option.name">
       {{option.label}}
@@ -14,9 +14,9 @@
 @if (activeSelectedCategori) {
   <mat-form-field appearance="fill">
   <mat-label>Filter</mat-label>
-  <mat-select [(ngModel)]="selectedFilter">
+  <mat-select [(ngModel)]="selectedFilter"  >
     @for (option of activeSelectedCategori; track option.name) {
-     <mat-option  [value]="option.name">
+     <mat-option  [value]="option">
        {{option.name}}
      </mat-option>
    }

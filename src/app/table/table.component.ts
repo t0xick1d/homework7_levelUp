@@ -25,10 +25,15 @@ import { CountryComponent } from '../component/tableComponents/country/country.c
 import { TagsComponent } from '../component/tableComponents/tags/tags.component';
 import { ActionComponent } from '../component/tableComponents/action/action.component';
 import { Store } from '@ngrx/store';
-import { selectAllFilter } from '../store/Filters/select';
+import { selectActiveFilter, selectAllFilter } from '../store/Filters/select';
 import { Observable } from 'rxjs';
-import { IFilters } from '../store/Filters/reducer';
-import { loadFilters, loadFilterSuccess } from '../store/Filters/action';
+import { IFilters, SelectFilterI } from '../store/Filters/reducer';
+import {
+  loadFilters,
+  loadFilterSuccess,
+  setActiveCategories,
+} from '../store/Filters/action';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-table',
@@ -75,28 +80,43 @@ export class TableComponent implements OnInit {
     },
   ];
   filters$: Observable<FilterConfig[]>;
+  activeFilters$: Observable<SelectFilterI[]>;
   public dataSource: Product[] = [];
   public filterDataSource: Product[] | undefined = undefined;
   // public dataFilter: FilterConfig[] = [];
   public displayedColumns: string[] = [];
   public selectedValue: string | undefined = '';
-  public selectedFilter: string | undefined = undefined;
+  public selectedFilter: FilterOption | undefined = undefined;
   public activeSelectedCategori: FilterOption[] | undefined = undefined;
 
   constructor(
     public dialog: MatDialog,
     private tableService: TableService,
-    private store: Store
+    private store: Store,
+    private router: Router
   ) {
     this.filters$ = this.store.select(selectAllFilter);
+    this.activeFilters$ = this.store.select(selectActiveFilter);
   }
   ngOnInit(): void {
     this.displayedColumns = this.configure.map((e) => e.titleColums);
     this.tableService.nGetData();
+
+    this.store.dispatch(loadFilters());
+    this.activeFilters$.subscribe((v) => {
+      const activeFilter = v.find((e) => e.path === this.router.url);
+      this.selectedValue = activeFilter?.categoriaes;
+      this.changeSelect();
+      this.selectedFilter = activeFilter?.activeCategories;
+    });
     this.tableService.productSubject.subscribe((data) => {
+      if (this.selectedValue) {
+        this.filterDataSource = data.filter((e) => {
+          return e.category === this.selectedFilter?.value;
+        });
+      }
       this.dataSource = data;
     });
-    this.store.dispatch(loadFilters());
   }
   openEditCtegories(element: Product): void {
     const dialogRef = this.dialog.open(ModalEditComponent, {
@@ -113,25 +133,41 @@ export class TableComponent implements OnInit {
   clear(): void {
     this.tableService.productSubject.next([]);
   }
-  changeSelect(newValue: any) {
+  changeSelect() {
     this.filters$.subscribe((v) => {
-      this.activeSelectedCategori = v.filter(
-        (e) => e.name === this.selectedValue
-      )[0].options;
+      if (
+        this.selectedValue === 'category' ||
+        this.selectedValue === 'inStock' ||
+        this.selectedValue === 'priceRange'
+      ) {
+        this.activeSelectedCategori = v.filter(
+          (e) => e.name === this.selectedValue
+        )[0].options;
+      }
     });
   }
   addFilter() {
+    this.store.dispatch(
+      setActiveCategories({
+        setCategories: {
+          path: this.router.url,
+          categoriaes: this.selectedValue,
+          activeCategories: this.selectedFilter,
+        },
+      })
+    );
+
     if (this.selectedValue === 'category') {
-      this.filterDataSource = this.dataSource.filter(
-        (e) => e.category === this.selectedFilter
-      );
+      this.filterDataSource = this.dataSource.filter((e) => {
+        return e.category === this.selectedFilter!.value;
+      });
     }
     if (this.selectedValue === 'inStock') {
       this.filterDataSource = this.dataSource.filter((e) => {
-        if ('Available' === this.selectedFilter) {
+        if ('Available' === this.selectedFilter!.name) {
           return e.inStock;
         }
-        if ('Out of stock' === this.selectedFilter) {
+        if ('Out of stock' === this.selectedFilter!.name) {
           return e.inStock === false;
         }
         return false;
@@ -156,7 +192,7 @@ export class TableComponent implements OnInit {
       );
     }
     if (this.selectedValue === 'priceRange') {
-      const str: string | undefined = this.selectedFilter;
+      const str: string | undefined = this.selectedFilter!.value;
       const numbers: number[] = [];
       let currentNum: string = '';
       if (str !== undefined) {
