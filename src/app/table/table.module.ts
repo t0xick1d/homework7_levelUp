@@ -11,6 +11,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { ActionComponent } from '../component/tableComponents/action/action.component';
+import { FilterComponent } from './filter/filter.component';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,16 +23,18 @@ import { ActionComponent } from '../component/tableComponents/action/action.comp
     CountryComponent,
     TagsComponent,
     ActionComponent,
+    FilterComponent,
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    MatSelectModule,
     MatFormFieldModule,
     MatChipsModule,
     MatIconModule,
     MatChipsModule,
     MatMenuModule,
-   MatButtonModule,
-    
+    MatButtonModule,
   ],
   exports: [
     NameComponent,
@@ -38,6 +43,7 @@ import { ActionComponent } from '../component/tableComponents/action/action.comp
     CountryComponent,
     TagsComponent,
     ActionComponent,
+    FilterComponent,
   ],
 })
 export class TableModule {}

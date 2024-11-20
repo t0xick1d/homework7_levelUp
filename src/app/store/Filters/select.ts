@@ -9,6 +9,6 @@ export const selectAllFilter = createSelector(selectFilterState, (state: IFilter
 export const selectActiveFilter = createSelector(
   selectFilterState,
   (state: IFilters) => {
-    return state.setFilters;
+    return state.activeFilter;
   }
 );

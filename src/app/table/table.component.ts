@@ -25,15 +25,16 @@ import { CountryComponent } from '../component/tableComponents/country/country.c
 import { TagsComponent } from '../component/tableComponents/tags/tags.component';
 import { ActionComponent } from '../component/tableComponents/action/action.component';
 import { Store } from '@ngrx/store';
-import { selectActiveFilter, selectAllFilter } from '../store/Filters/select';
-import { Observable } from 'rxjs';
-import { IFilters, SelectFilterI } from '../store/Filters/reducer';
-import {
-  loadFilters,
-  loadFilterSuccess,
-  setActiveCategories,
-} from '../store/Filters/action';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { selectAllTable, selectFilterTable } from '../store/tableData/select';
+import {
+  filterTable,
+  loadTableData,
+  resetFilterTable,
+} from '../store/tableData/action';
+import { selectActiveFilter } from '../store/Filters/select';
+import { activeFilterI } from '../store/Filters/reducer';
 
 @Component({
   selector: 'app-table',
@@ -79,14 +80,11 @@ export class TableComponent implements OnInit {
       component: ActionComponent,
     },
   ];
-  filters$: Observable<FilterConfig[]>;
-  activeFilters$: Observable<SelectFilterI[]>;
-  public dataSource: Product[] = [];
-  public filterDataSource: Product[] | undefined = undefined;
-  // public dataFilter: FilterConfig[] = [];
+  tables$: Observable<Product[]>;
+  tablesFilter$: Observable<Product[]>;
+  activeFilter$: Observable<activeFilterI[]>;
   public displayedColumns: string[] = [];
-  public selectedValue: string | undefined = '';
-  public selectedFilter: FilterOption | undefined = undefined;
+  public showFilterData: boolean = false;
   public activeSelectedCategori: FilterOption[] | undefined = undefined;
 
   constructor(
@@ -95,28 +93,31 @@ export class TableComponent implements OnInit {
     private store: Store,
     private router: Router
   ) {
-    this.filters$ = this.store.select(selectAllFilter);
-    this.activeFilters$ = this.store.select(selectActiveFilter);
+    this.tables$ = this.store.select(selectAllTable);
+    this.tablesFilter$ = this.store.select(selectFilterTable);
+    this.activeFilter$ = this.store.select(selectActiveFilter);
   }
   ngOnInit(): void {
-    this.displayedColumns = this.configure.map((e) => e.titleColums);
-    this.tableService.nGetData();
-
-    this.store.dispatch(loadFilters());
-    this.activeFilters$.subscribe((v) => {
-      const activeFilter = v.find((e) => e.path === this.router.url);
-      this.selectedValue = activeFilter?.categoriaes;
-      this.changeSelect();
-      this.selectedFilter = activeFilter?.activeCategories;
+    this.store.dispatch(loadTableData());
+    this.tables$.subscribe((e) => {
+      this.activeFilter$.subscribe((e) => {
+        const obj = e.find((e) => e.route === this.router.url);
+        if (obj) {
+          this.store.dispatch(filterTable({ filter: obj }));
+        } else {
+          this.store.dispatch(resetFilterTable());
+        }
+      });
     });
-    this.tableService.productSubject.subscribe((data) => {
-      if (this.selectedValue) {
-        this.filterDataSource = data.filter((e) => {
-          return e.category === this.selectedFilter?.value;
-        });
+    this.tablesFilter$.subscribe((e) => {
+      if (e.length !== 0) {
+        this.showFilterData = true;
       }
-      this.dataSource = data;
+      if (e.length === 0) {
+        this.showFilterData = false;
+      }
     });
+    this.displayedColumns = this.configure.map((e) => e.titleColums);
   }
   openEditCtegories(element: Product): void {
     const dialogRef = this.dialog.open(ModalEditComponent, {
@@ -132,95 +133,5 @@ export class TableComponent implements OnInit {
   }
   clear(): void {
     this.tableService.productSubject.next([]);
-  }
-  changeSelect() {
-    this.filters$.subscribe((v) => {
-      if (
-        this.selectedValue === 'category' ||
-        this.selectedValue === 'inStock' ||
-        this.selectedValue === 'priceRange'
-      ) {
-        this.activeSelectedCategori = v.filter(
-          (e) => e.name === this.selectedValue
-        )[0].options;
-      }
-    });
-  }
-  addFilter() {
-    this.store.dispatch(
-      setActiveCategories({
-        setCategories: {
-          path: this.router.url,
-          categoriaes: this.selectedValue,
-          activeCategories: this.selectedFilter,
-        },
-      })
-    );
-
-    if (this.selectedValue === 'category') {
-      this.filterDataSource = this.dataSource.filter((e) => {
-        return e.category === this.selectedFilter!.value;
-      });
-    }
-    if (this.selectedValue === 'inStock') {
-      this.filterDataSource = this.dataSource.filter((e) => {
-        if ('Available' === this.selectedFilter!.name) {
-          return e.inStock;
-        }
-        if ('Out of stock' === this.selectedFilter!.name) {
-          return e.inStock === false;
-        }
-        return false;
-      });
-    }
-    if (this.selectedValue === 'minPrice') {
-      this.filterDataSource = [];
-      this.filterDataSource.push(
-        this.dataSource.reduce(
-          (acc, obj) => (obj.price < acc.price ? obj : acc),
-          this.dataSource[0]
-        )
-      );
-    }
-    if (this.selectedValue === 'maxPrice') {
-      this.filterDataSource = [];
-      this.filterDataSource.push(
-        this.dataSource.reduce(
-          (acc, obj) => (obj.price > acc.price ? obj : acc),
-          this.dataSource[0]
-        )
-      );
-    }
-    if (this.selectedValue === 'priceRange') {
-      const str: string | undefined = this.selectedFilter!.value;
-      const numbers: number[] = [];
-      let currentNum: string = '';
-      if (str !== undefined) {
-        for (let i = 0; i < str.length; i++) {
-          const char = str[i];
-          if (!isNaN(Number(char)) && char !== ' ') {
-            currentNum += char;
-          } else if (currentNum) {
-            numbers.push(parseInt(currentNum, 10));
-            currentNum = '';
-          }
-        }
-        if (currentNum) {
-          numbers.push(parseInt(currentNum, 10));
-        }
-      }
-      this.filterDataSource = this.dataSource.filter((e) => {
-        if (numbers.length === 1) {
-          return e.price > numbers[0];
-        }
-        return e.price > numbers[0] && e.price < numbers[1];
-      });
-    }
-  }
-  resetFilter(): void {
-    this.filterDataSource = undefined;
-    this.selectedValue = undefined;
-    this.selectedFilter = undefined;
-    this.activeSelectedCategori = undefined;
   }
 }

@@ -20,7 +20,6 @@ export class TableService extends AbstractService {
   }
 
   public getData(): Observable<any> {
-    this.router;
     return this.http
       .request({
         method: 'GET',
@@ -44,16 +43,17 @@ export class TableService extends AbstractService {
         })
       );
   }
-  public nGetData(): void {
-    this.getData().subscribe((data) => {
-      this.productSubject.next(data.body);
-    });
+  public nGetData() {
+    // this.getData().subscribe((data) => {
+    //   this.productSubject.next(data.body);
+    // });
+    return this.getData();
   }
   public nGetDataFilter() {
-    this.getDataFilter().subscribe((data) => {
-      this.filterSubject.next(data.body);
-      return data.body;
-    });
+    // this.getDataFilter().subscribe((data) => {
+    //   this.filterSubject.next(data.body);
+    //   return data.body;
+    // });
     // this.getDataFilter().subscribe((data) => data.body);
     return this.getDataFilter();
   }

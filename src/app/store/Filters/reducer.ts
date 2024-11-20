@@ -1,21 +1,26 @@
 import { createReducer, on } from '@ngrx/store';
 import { FilterConfig, FilterOption } from '../../interface/table.interface';
-import { loadFilterSuccess, setActiveCategories } from './action';
+import {
+  loadFilterSuccess,
+  resetActiveFilter,
+  setActiveFilter,
+} from './action';
+import { Router } from '@angular/router';
 
-export interface SelectFilterI {
-  path: string;
-  categoriaes: string | undefined;
-  activeCategories: FilterOption | undefined;
+export interface activeFilterI {
+  route: string;
+  filter: FilterConfig;
+  activeFilter?: FilterOption;
 }
 
 export interface IFilters {
   filters: FilterConfig[];
-  setFilters: SelectFilterI[];
+  activeFilter: activeFilterI[];
 }
 
 export const initialState: IFilters = {
   filters: [],
-  setFilters: [],
+  activeFilter: [],
 };
 
 export const filterReducer = createReducer(
@@ -26,25 +31,20 @@ export const filterReducer = createReducer(
       filters,
     };
   }),
-  on(setActiveCategories, (state, { setCategories }) => {
-    const findPath = state.setFilters.findIndex(
-      (e) => e.path === setCategories.path
+  on(setActiveFilter, (state, { filter }) => {
+    const updateFilters = state.activeFilter.filter(
+      (e) => e.route !== filter.route
     );
-    if (findPath !== -1) {
-      const newSetFilter = [...state.setFilters];
-      if (setCategories.activeCategories === undefined) {
-        newSetFilter[findPath] = setCategories;
-        newSetFilter[findPath].activeCategories = undefined;
-      }
-      newSetFilter[findPath] = setCategories;
-      return {
-        ...state,
-        setFilters: [...newSetFilter],
-      };
-    }
     return {
       ...state,
-      setFilters: [...state.setFilters, setCategories],
+      activeFilter: [...updateFilters, filter],
+    };
+  }),
+  on(resetActiveFilter, (state, { routes }) => {
+    const updateFilters = state.activeFilter.filter((e) => e.route !== routes);
+    return {
+      ...state,
+      activeFilter: [...updateFilters],
     };
   })
 );

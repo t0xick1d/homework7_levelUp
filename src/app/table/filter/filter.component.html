@@ -1,0 +1,24 @@
+<mat-form-field appearance="fill">
+  <mat-label>Filter</mat-label>
+  <mat-select [(ngModel)]="selectedValue" (ngModelChange)="changeSelect(selectedValue)">
+  @for (option of filters$| async; track option.name) {
+    <mat-option [value]="option">
+      {{option.label}}
+    </mat-option>
+}
+  </mat-select>
+</mat-form-field>
+@if (showActiveFilter !== 'text') {
+  <mat-form-field appearance="fill">
+  <mat-label>Filter</mat-label>
+  <mat-select [(ngModel)]="activeSelectedValue"  (ngModelChange)="changeActiveSelect(activeSelectedValue)">
+   @for (option of activeSelectedFilter; track option.name) {
+    <mat-option  [value]="option">
+      {{option.name}}
+    </mat-option>
+   }
+   </mat-select>
+  </mat-form-field>
+}
+<button mat-raised-button color="primary" (click)="addFilter()">Apply</button>
+<button mat-raised-button color="warn" (click)="resetFilter()">Reset</button>
